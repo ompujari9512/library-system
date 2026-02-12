@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Portal Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 h-screen w-full relative flex items-center justify-center overflow-hidden">
+
+    <body class="bg-gray-900 h-screen w-full relative flex items-center justify-center overflow-hidden font-sans">
+    
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2256&auto=format&fit=crop" 
+             alt="Library Background" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+    </div>
+
+    </body>
+
+    <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-gray-200 text-sm">Access the vast world of knowledge</p>
+        </div>
+
+       <form method="POST" class="space-y-6">
+    {% csrf_token %} {% if messages %}
+        {% for message in messages %}
+            <div class="p-3 mb-4 text-sm rounded-lg {% if message.tags == 'error' %}bg-red-500/50 text-red-100{% else %}bg-green-500/50 text-green-100{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <input type="hidden" name="action" id="form-action" value="login">
+
+    <div>
+        <label for="username" class="block text-sm font-medium text-gray-200 mb-1">Username</label>
+        <input type="text" id="username" name="username" required
+               class="w-full px-4 py-3 bg-white/20 border border-gray-400/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition"
+               placeholder="Enter your ID">
+    </div>
+
+    <div>
+        <label for="password" class="block text-sm font-medium text-gray-200 mb-1">Password</label>
+        <input type="password" id="password" name="password" required
+               class="w-full px-4 py-3 bg-white/20 border border-gray-400/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition"
+               placeholder="••••••••">
+    </div>
+
+    <button type="submit" onclick="document.getElementById('form-action').value='login'"
+            class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg shadow-lg transition duration-300">
+        Sign In
+    </button>
+    
+
+</form>
+
+        <div class="my-6 flex items-center">
+            <div class="flex-grow h-px bg-white/20"></div>
+            <span class="px-3 text-sm text-gray-300">OR</span>
+            <div class="flex-grow h-px bg-white/20"></div>
+        </div>
+
+        <a href="{% url 'guest_login' %}" class="w-full block">
+    <button type="button" class="w-full py-3 bg-transparent border-2 border-white/30 text-white font-medium rounded-lg hover:bg-white/10 transition duration-300 mb-6">
+        Continue as Guest
+    </button>
+</a>
+
+        <div class="text-center text-sm text-gray-300">
+            Don't have an account? 
+            <a href="{% url 'signup' %}" class="...">Sign up here</a>
+        </div>
+    </div>
+
+</body>
+</html>

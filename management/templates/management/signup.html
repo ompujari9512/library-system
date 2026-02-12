@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 h-screen w-full relative flex items-center justify-center overflow-hidden font-sans">
+
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=2070&auto=format&fit=crop" 
+             alt="Library Books" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+    </div>
+
+    <div class="relative z-10 bg-white/5 border border-white/10 p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4 backdrop-blur-md">
+        
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
+                New Membership
+            </h1>
+            <p class="text-gray-400 text-sm mt-2">Create your digital library card</p>
+        </div>
+
+        <form method="POST" class="space-y-6">
+    {% csrf_token %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="p-3 text-sm text-center rounded-lg bg-red-500/20 border border-red-500/50 text-red-200">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="relative">
+        <input type="text" name="username" id="username" required 
+               class="peer w-full px-4 py-3 bg-black/30 border border-gray-600 rounded-lg text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all placeholder-transparent"
+               placeholder=" ">
+        <label for="username" 
+               class="absolute left-4 -top-2.5 text-xs text-amber-500 transition-all 
+                      peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
+                      peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-amber-500">
+            Choose a Username
+        </label>
+    </div>
+
+    <div class="relative">
+        <input type="email" name="email" id="email"
+               class="peer w-full px-4 py-3 bg-black/30 border border-gray-600 rounded-lg text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all placeholder-transparent"
+               placeholder=" ">
+        <label for="email" 
+               class="absolute left-4 -top-2.5 text-xs text-amber-500 transition-all 
+                      peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
+                      peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-amber-500">
+            Email Address
+        </label>
+    </div>
+
+    <div class="relative">
+        <input type="password" name="password" id="password" required 
+               class="peer w-full px-4 py-3 bg-black/30 border border-gray-600 rounded-lg text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all placeholder-transparent"
+               placeholder=" ">
+        <label for="password" 
+               class="absolute left-4 -top-2.5 text-xs text-amber-500 transition-all 
+                      peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
+                      peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-amber-500">
+            Password
+        </label>
+    </div>
+
+    <div class="relative">
+        <input type="password" name="confirm_password" id="confirm_password" required 
+               class="peer w-full px-4 py-3 bg-black/30 border border-gray-600 rounded-lg text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all placeholder-transparent"
+               placeholder=" ">
+        <label for="confirm_password" 
+               class="absolute left-4 -top-2.5 text-xs text-amber-500 transition-all 
+                      peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 
+                      peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-amber-500">
+            Confirm Password
+        </label>
+    </div>
+
+    <button type="submit" 
+            class="w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold rounded-lg shadow-lg shadow-amber-900/50 transition duration-300 transform hover:scale-[1.02]">
+        Create Account
+    </button>
+</form>
+
+        <div class="mt-6 text-center text-sm text-gray-400">
+            Already a member? 
+            <a href="{% url 'login' %}" class="text-amber-400 hover:text-amber-300 font-semibold hover:underline">Log in here</a>
+        </div>
+    </div>
+
+</body>
+</html>

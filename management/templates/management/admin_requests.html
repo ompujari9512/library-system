@@ -1,0 +1,161 @@
+{% extends 'management/base.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-slate-900 font-sans p-6 md:p-10 transition-colors duration-300">
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
+                <span class="p-3 bg-gradient-to-br from-amber-400 to-orange-600 rounded-xl shadow-lg shadow-amber-500/20 text-white">
+                    <i data-lucide="inbox" class="w-6 h-6"></i>
+                </span>
+                Manage Requests
+            </h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 ml-1 text-sm">
+                Review student book requests and manage returns.
+            </p>
+        </div>
+
+        <div class="flex gap-4">
+            <div class="px-5 py-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Pending</p>
+                    <p class="text-xl font-bold text-slate-800 dark:text-white">{{ requests.count }}</p>
+                </div>
+            </div>
+            <div class="px-5 py-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Issued</p>
+                    <p class="text-xl font-bold text-slate-800 dark:text-white">{{ issued_books.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-12">
+        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <i data-lucide="clock" class="w-5 h-5 text-amber-500"></i>
+            Pending Approvals
+        </h2>
+
+        {% if requests %}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {% for req in requests %}
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-amber-100 dark:border-slate-700 hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-400"></div>
+
+                <div class="flex items-start justify-between">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold text-lg shadow-inner">
+                            {{ req.user.username|slice:":1"|upper }}
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 dark:text-white text-lg">{{ req.user.username }}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Student ID: #{{ req.user.id }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-right">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-bold border border-amber-100 dark:border-amber-800/50">
+                            <i data-lucide="calendar" class="w-3 h-3"></i> {{ req.issued_date }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex items-center gap-4 bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+                    <div class="w-10 h-14 bg-slate-200 dark:bg-slate-600 rounded flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="book" class="w-5 h-5 text-slate-400"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Requesting Book</p>
+                        <p class="font-bold text-slate-800 dark:text-white">{{ req.book.title }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <a href="{% url 'approve_request' req.id %}" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-green-500/20">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> Approve
+                    </a>
+                    <a href="{% url 'delete_request' req.id %}" class="flex-1 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i> Reject
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-10 text-center border border-dashed border-slate-300 dark:border-slate-700">
+            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                <i data-lucide="check-check" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200">All caught up!</h3>
+            <p class="text-slate-500 dark:text-slate-400">No pending requests at the moment.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <i data-lucide="book-open-check" class="w-5 h-5 text-blue-500"></i>
+            Active Loans
+        </h2>
+
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-100 dark:border-slate-700">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Student</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Book Title</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Issued Date</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Due Date</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
+                        {% for issue in issued_books %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
+                                        {{ issue.user.username|slice:":1"|upper }}
+                                    </div>
+                                    <span class="font-medium text-slate-800 dark:text-white">{{ issue.user.username }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">
+                                {{ issue.book.title }}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                {{ issue.issued_date }}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                {{ issue.return_date }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{% url 'return_book' issue.id %}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 rounded-lg text-xs font-bold transition">
+                                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Return
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-sm italic">
+                                No books are currently issued.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+{% endblock %}

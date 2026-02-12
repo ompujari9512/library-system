@@ -1,0 +1,29 @@
+{% extends 'management/base.html' %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col bg-gray-900 text-white overflow-hidden">
+    <div class="h-16 border-b border-gray-700 flex items-center justify-between px-6 bg-gray-800">
+        <h1 class="text-xl font-bold truncate">{{ book.title }} <span class="text-gray-400 text-sm font-normal">by {{ book.author }}</span></h1>
+        <button onclick="window.close()" class="px-4 py-1 bg-red-600 hover:bg-red-700 rounded text-sm">Close Window</button>
+    </div>
+
+    <div class="flex-1 relative bg-gray-800 flex items-center justify-center">
+        {% if book.pdf_file %}
+            <iframe src="{{ book.pdf_file.url }}" class="w-full h-full border-none">
+                <p class="text-white text-center mt-10">
+                    Your browser is having trouble showing this PDF. <br>
+                    <a href="{{ book.pdf_file.url }}" class="text-amber-500 underline font-bold">
+                        Click here to download it directly.
+                    </a>
+                </p>
+            </iframe>
+        {% else %}
+            <div class="text-center text-gray-400">
+                <i data-lucide="file-question" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+                <p class="text-lg">No PDF file available for this book.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
